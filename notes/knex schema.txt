@@ -1,0 +1,58 @@
+The document says Identifier Syntax, ie, table name, column name, has no place for selecting schema, so if you are doing schemaName.tableName, query might be rendered wrong. 
+
+It suggested use `.withSchema('schemaName')` instead.
+
+But I found `.withSchema` only work in one schema all over the builder block.
+
+As so far, I have the following temporary sollutins: 
+
+- Do not use `.withSchema` at all in speasure query, include schema name in table name string.
+This against the document.
+
+- Use sub-query with `.withSchema`
+```
+    {
+        let rows = await knex.withSchema("sandbox1")
+            .select('first_name', 'last_name', 'phone', 'site', "sites.name as sname")
+            .from('users')
+            .leftJoin(
+                knex.withSchema('public')
+                    .table('sites')
+                    .select()
+                    .as("sites"),
+                "sites.id",
+                "users.site")
+        console.log(rows)
+    }
+```
+This way need use `.as` in sub query.
+
+- Use `.joinRaw()`
+```
+    {
+        let queryBuilder = knex.withSchema("sandbox1")
+            .select('first_name', 'last_name', 'phone', 'site', "sites.name as sname")
+            .from('users')
+            .joinRaw("left join public.sites as sites ON sites.id = users.site", [])
+        let sql = queryBuilder.toSQL().toNative()
+        let rows = await queryBuilder
+
+        console.log((sql))
+        console.log(rows)
+    }
+```
+
+- Use `.raw()`
+```
+    {
+        let { rows ,rowCount } = await knex
+            .raw('SELECT users.first_name, users.last_name, users.phone, users.site, sites.name as sname FROM sandbox1.users, public.sites WHERE sites.id = users.site;');
+
+        console.log(rows)
+    }
+```
+This has less benifits to use knex.
+	
+- Use other libarary or ORMs or drivers.
+	
+The final power.
