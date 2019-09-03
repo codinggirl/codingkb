@@ -1,0 +1,22 @@
+安装
+下载指定版本的二进制文件
+在Node.js官方的发布网站https://nodejs.org/dist/下载合适的二进制包，比如我要安装v11.14.0版本，我需要下载二进制包为node-v11.14.0-linux-x64.tar.gz。
+
+解压文件
+tar -xvf node-v11.14.0-linux-x64.tar.gz
+拷贝文件到指定目录
+sudo cp -r node-v11.14.0-linux-x64/* /usr/local/
+测试是否安装成功
+root@blackmatch:~# node -v
+v11.14.0
+root@blackmatch:~# npm -v
+6.7.0
+root@blackmatch:~# npx -v
+6.7.0
+总结
+二进制包一定要下载合适的（比如x64、x86）等。
+安装完成后如果相关命令不生效，请重新打开一个终端即可生效。
+
+
+
+https://github.com/nodejs/help/wiki/Installation

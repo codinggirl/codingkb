@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+
+
+
+    <link rel="stylesheet" href="/Content/css/font.css">
+    <link rel="stylesheet" href="/Content/css/xadmin.css">
+    <link rel="stylesheet" href="/Content/bootstrap/css/bootstrap.min.css">
+    <link rel='stylesheet' href='/Content/bootstrap/css/style.css' />
+    <link href="/Content/sweetalert/sweetalert.css" rel="stylesheet">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/Content/lib/layui/layui.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="/Content/FileUpload/css/jquery.fileupload.css" />
+
+    <script src="/Content/js/city-picker.data.js"></script>
+    <script src="/Content/js/city-picker.js"></script>
+    <link href="/Content/css/city-picker.css" rel="stylesheet">
+
+
+<body>
+    <div class="app">
+        <div class="x-nav">
+
+            <span class="nav-header">
+                <a href="">首页</a>>
+                <a href="">业务管理</a>>
+                <a>
+                    <cite>需求管理</cite></a>
+            </span>
+
+        </div>
+        <div class="x-body">
+            <div class="layui-row">
+
+
+                <input type="text" v-model="search.title" placeholder="请输入标题" autocomplete="off" class="layui-input"
+                    style="width: 120px;display: inline;">
+                <button class="layui-btn" lay-submit="" lay-filter="sreach" v-on:click="getdata"><i
+                        class="layui-icon">&#xe615;</i></button>
+
+            </div>
+            <hr />
+            <div>
+
+                <button class="layui-btn" v-on:click="add" v-if="jiance('workadd')"><i
+                        class="layui-icon"></i>添加</button>
+
+            </div>
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i
+                                    class="layui-icon">&#xe605;</i></div>
+                        </th>
+                        <th>标题</th>
+                        <th>需求人数</th>
+                        <th>已推荐人数</th>
+                        <th>已招聘人数</th>
+
+                        <th>工作城市</th>
+                        <th>工作地点</th>
+                        <th>工作经验</th>
+                        <th>薪资范围</th>
+                        <th>行业</th>
+                        <th>技能</th>
+                        <th>赏金</th>
+                        <th>支付方式</th>
+
+                        <th>日期</th>
+                        <th>需求状态</th>
+
+                        <th>操作</th>
+
+                    </tr>
+                </thead>
+                <tbody v-cloak>
+                    <tr v-for="uitem in arrayData">
+                        <td>
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i
+                                    class="layui-icon">&#xe605;</i></div>
+                        </td>
+                        <td>{{uitem.title}}</td>
+                        <td>{{uitem.num}}</td>
+
+                        <td>{{uitem.tuijiannum}}</td>
+                        <td>{{uitem.zhaopinnum}}</td>
+
+                        <td>{{uitem.city}}</td>
+                        <td>{{uitem.address}}</td>
+                        <td>{{uitem.jingyan}}</td>
+                        <td>{{uitem.money}}</td>
+                        <td>{{uitem.hangye}}</td>
+                        <td>{{uitem.lingyu}}</td>
+                        <td>{{uitem.shangjin}}</td>
+                        <td>
+
+                            <span v-if="uitem.paytype==0">
+                                按人
+                            </span>
+                            <span v-if="uitem.paytype==1">
+                                按月
+                            </span>
+                        </td>
+
+
+                        <td>{{uitem.createtime}}</td>
+                        <td>
+                            <span v-if="uitem.state==0">待审核</span>
+                            <span v-if="uitem.state==1">审核通过</span>
+                            <span v-if="uitem.state==-1">审核不通过(理由:{{uitem.liyou}})</span>
+                            <span v-if="uitem.state==2">需求关闭</span>
+                            <span v-if="uitem.state==3">暂停</span>
+           
+                        </td>
+                        <td class="td-manage">
+                            <a v-if="uitem.state==-1" title="编辑" v-on:click="tijiao(uitem)" href="javascript:;">
+                                重新提交
+                            </a>
+                            <a title="删除" v-on:click="view(uitem)" href="javascript:;">
+                                详情
+                            </a>
+                            <a v-if="uitem.state==0  && jiance('worksh')" v-on:click="shshow(uitem)"
+                                href="javascript:;">
+                                审核
+                            </a>
+                            <a v-if="jiance('workupdate')&& uitem.state>=1"
+                                v-on:click="updatestate(uitem)" href="javascript:;">
+                                状态变更
+                            </a>
+                            <a title="编辑" v-on:click="vupdate(uitem)" href="javascript:;" v-if="jiance('workedit')">
+                                <i class="layui-icon"></i>
+                            </a>
+                            <a title="删除" v-on:click="vdel(uitem)" href="javascript:;" v-if="jiance('workdel')">
+                                <i class="layui-icon">&#xe640;</i>
+                            </a>
+
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="page">
+                <div>
+                    <vue-nav :cur="search.page" :all="all" :allcount="allcount" :callback="callback"></vue-nav>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!--添加-->
+        <div class="modal fade" id="addbox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            data-backdrop="static" data-keyboard="false" aria-hidden="true">
+            <div class="modal-dialog" style="width:80%;">
+                <div class="modal-content" id="myModal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">添加信息</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" v-on:submit.prevent="insert">
+                            <fieldset>
+                                <div class="col-lg-6">
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">标题<span
+                                                style="color: red">*</span></label>
+                                        <div class="controls">
+                                            <input placeholder="" type="text" required class="form-control"
+                                                v-model="addobj.title">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">需求人数<span
+                                                style="color: red">*</span></label>
+                                        <div class="controls">
+                                            <input placeholder="" type="text" required class="form-control"
+                                                v-model="addobj.num">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">工作城市<span
+                                                style="color: red">*</span></label>
+                                        <div class="controls">
+                                            <input placeholder="" type="text" required class="form-control"
+                                                v-model="addobj.city">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">工作地点</label>
+                                        <div class="controls">
+                                            <input placeholder="" type="text" class="form-control"
+                                                v-model="addobj.address">
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">工作经验<span
+                                                style="color: red">*</span></label>
+                                        <div class="controls">
+                                            <select v-model="addobj.jingyan" required class="form-control">
+                                                <option value="">
+                                                    请选择
+                                                </option>
+                                                <option v-for="item in jingyanlist" :value='item.title'>
+                                                    {{item.title}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">薪资范围<span
+                                                style="color: red">*</span></label>
+                                        <div class="controls">
+                                            <select v-model="addobj.money" required class="form-control">
+                                                <option value="">
+                                                    请选择
+                                                </option>
+                                                <option v-for="item in xinzilist" :value='item.title'>
+                                                    {{item.title}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">行业</label>
+                                        <div class="controls">
+                                            <select v-model="addobj.hangye" class="form-control">
+                                                <option value="">
+                                                    请选择
+                                                </option>
+                                                <option v-for="item in hangyelist" :value='item.title'>
+                                                    {{item.title}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group" style="overflow: visible;height: 33px;">
+                                        <label for="input01" class="control-label">技能(用逗号分隔)</label>
+                                        <div class="controls">
+                                            <input placeholder="" type="text" class="form-control"
+                                                v-model="addobj.lingyu">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">赏金</label>
+                                        <div class="controls">
+                                            <input placeholder="" type="text" class="form-control"
+                                                v-model="addobj.shangjin">
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">支付方式</label>
+                                        <div class="controls">
+                                            <select v-model="addobj.paytype" class="form-control">
+                                                <option value="">
+                                                    请选择
+                                                </option>
+                                                <option v-for="item in paytypelist" :value='item.id'>
+                                                    {{item.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                                <div class="col-lg-6">
+
+                                    <div class="control-group">
+
+                                        <script id="add_content" name="content" type="text/plain"></script>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button type="submit" class="btn btn-primary">确认</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--添加结束-->
+        <!--修改-->
+        <div class="modal fade" id="editbox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            data-backdrop="static" data-keyboard="false" aria-hidden="true">
+            <div class="modal-dialog" style="width:80%;">
+
+                <div class="modal-content" id="myModal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">修改信息</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" v-on:submit.prevent="update">
+                            <fieldset>
+                                <div class="col-lg-6">
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">标题<span
+                                                style="color: red">*</span></label>
+                                        <div class="controls">
+                                            <input placeholder="" type="text" required class="form-control"
+                                                v-model="editobj.title">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">需求人数<span
+                                                style="color: red">*</span></label>
+                                        <div class="controls">
+                                            <input placeholder="" type="text" required class="form-control"
+                                                v-model="editobj.num">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">工作城市<span
+                                                style="color: red">*</span></label>
+                                        <div class="controls">
+                                            <input placeholder="" type="text" required class="form-control"
+                                                v-model="editobj.city">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">工作地点</label>
+                                        <div class="controls">
+                                            <input placeholder="" type="text" class="form-control"
+                                                v-model="editobj.address">
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">工作经验<span
+                                                style="color: red">*</span></label>
+                                        <div class="controls">
+                                            <select v-model="editobj.jingyan" required class="form-control">
+                                                <option value="">
+                                                    请选择
+                                                </option>
+                                                <option v-for="item in jingyanlist" :value='item.title'>
+                                                    {{item.title}}
+                                                </option>
+
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">薪资范围<span
+                                                style="color: red">*</span></label>
+                                        <div class="controls">
+                                            <select v-model="editobj.money" required class="form-control">
+                                                <option value="">
+                                                    请选择
+                                                </option>
+                                                <option v-for="item in xinzilist" :value='item.title'>
+                                                    {{item.title}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">行业</label>
+                                        <div class="controls">
+                                            <select v-model="editobj.hangye" class="form-control">
+                                                <option value="">
+                                                    请选择
+                                                </option>
+                                                <option v-for="item in hangyelist" :value='item.title'>
+                                                    {{item.title}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group" style="overflow: visible;height: 33px;">
+                                        <label for="input01" class="control-label">技能(用逗号分隔)</label>
+                                        <div class="controls">
+
+                                            <input placeholder="" type="text" class="form-control"
+                                                v-model="editobj.lingyu">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">赏金</label>
+                                        <div class="controls">
+                                            <input placeholder="" type="text" class="form-control"
+                                                v-model="editobj.shangjin">
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label for="input01" class="control-label">支付方式</label>
+                                        <div class="controls">
+                                            <select v-model="editobj.paytype" class="form-control">
+                                                <option value="">
+                                                    请选择
+                                                </option>
+                                                <option v-for="item in paytypelist" :value='item.id'>
+                                                    {{item.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                <div class="col-lg-6">
+
+                                    <div class="control-group">
+
+                                        <script id="edit_content" name="content" type="text/plain"></script>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button type="submit" class="btn btn-primary">确认</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--修改结束-->
+
+        <div class="modal fade" id="viewbox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" style="width:80%;">
+
+                <div class="modal-content" id="myModal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">信息详情</h4>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset>
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="control-group">
+                                            <label for="input01" class="control-label">标题</label>
+                                            <div class="controls">
+                                                {{info.title}}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="control-group">
+                                            <label for="input01" class="control-label">需求人数</label>
+                                            <div class="controls">
+                                                {{info.num}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="control-group">
+                                            <label for="input01" class="control-label">工作地点</label>
+                                            <div class="controls">
+                                                {{info.address}}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="control-group">
+                                            <label for="input01" class="control-label">工作经验</label>
+                                            <div class="controls">
+                                                {{info.jingyan}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="control-group">
+                                            <label for="input01" class="control-label">薪资范围</label>
+                                            <div class="controls">
+                                                {{info.money}}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="control-group">
+                                            <label for="input01" class="control-label">行业</label>
+                                            <div class="controls">
+                                                {{info.hangye}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="control-group">
+                                            <label for="input01" class="control-label">技能</label>
+                                            <div class="controls">
+                                                {{info.lingyu}}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="control-group">
+                                            <label for="input01" class="control-label">赏金</label>
+                                            <div class="controls">
+                                                {{info.shangjin}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="control-group">
+                                            <label for="input01" class="control-label">支付方式</label>
+                                            <div class="controls">
+                                                <span v-if="info.paytype==1">月</span>
+                                                <span v-if="info.paytype==0">人</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="control-group">
+                                            <label for="input01" class="control-label">日期</label>
+                                            <div class="controls">
+                                                {{info.createtime}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="control-group">
+                                            <label for="input01" class="control-label">描述</label>
+                                            <div class="controls" v-html="info.content"
+                                                style="height: 386px;overflow: auto;width: 400px;">
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+
+
+
+
+
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="control-group" style="height: 386px;overflow: auto;">
+                                    <h4>人才库匹配</h4>
+
+                                    <table class="layui-table" v-for="uitem in personlist">
+                                        <tbody>
+                                            <tr>
+
+                                                <th>候选人</th>
+                                                <th><a v-on:click="goshowperson(uitem)">{{uitem.truename}}</a></th>
+                                                <th>电话</th>
+                                                <th>{{uitem.phone}}</th>
+
+                                            </tr>
+                                            <tr>
+                                                <th>身份证号码</th>
+                                                <th>{{uitem.idcard}}</th>
+                                                <th>工作年限</th>
+                                                <th>{{uitem.workyear}}</th>
+
+
+                                            </tr>
+                                            <tr>
+                                                <th>状态</th>
+                                                <th>{{uitem.workstate}}</th>
+                                                <th>技能</th>
+                                                <th>{{uitem.lingyu}}</th>
+
+
+                                            </tr>
+                                            <tr>
+                                                <th>入职单位</th>
+                                                <th>{{uitem.danwei}}</th>
+                                                <th>教育履历</th>
+                                                <th>{{uitem.luli}}</th>
+                                            </tr>
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                                <div class="control-group" style="height: 286px;overflow: auto;">
+                                    <h4>关联推荐单</h4>
+
+                                    <table class="layui-table" v-for="(uitem,index) in orderlist">
+                                        <tbody>
+                                            <tr>
+
+                                                <th>序号</th>
+                                                <th>{{index+1}}</a>
+                                                </th>
+                                                <th>单号</th>
+                                                <th><a v-on:click="goshow(uitem)">{{uitem.tjordernum}}</a>
+                                                </th>
+
+                                            </tr>
+                                            <tr>
+
+                                                <th>推荐人姓名</th>
+                                                <th>{{uitem.tjtruename}}</th>
+                                                <th>推荐人电话</th>
+                                                <th>{{uitem.tjphone}}</th>
+                                            </tr>
+                                            <tr>
+
+                                                <th>候选人姓名</th>
+                                                <th>{{uitem.hxusername}}</th>
+                                                <th>候选人电话</th>
+                                                <th>{{uitem.hxphone}}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>是否自荐</th>
+                                                <th>
+                                                    <span v-if="uitem.zijian==0">否</span>
+                                                    <span v-if="uitem.zijian==1">是</span>
+                                                </th>
+                                                <th>推荐状态</th>
+                                                <th>
+                                                    <span v-if="uitem.state==0">待审核</span>
+                                                    <span v-if="uitem.state==1">待筛选</span>
+                                                    <span v-if="uitem.state==2">审核不通过</span>
+                                                    <span v-if="uitem.state==3">待面试</span>
+                                                    <span v-if="uitem.state==4">面试不通过</span>
+                                                    <span v-if="uitem.state==5">筛选不通过</span>
+                                                    <span v-if="uitem.state==6">候选人放弃</span>
+                                                    <span v-if="uitem.state==7">待入职</span>
+                                                    <span v-if="uitem.state==10">已入职</span>
+                                                    <span v-if="uitem.state==-1">已离职</span>
+
+                                                    <span v-if="uitem.state==-2">候选人放弃</span>
+                                                </th>
+
+
+                                            </tr>
+
+                                        </tbody>
+
+                                    </table>
+                                </div>
+
+                            </div>
+
+                        </fieldset>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="shbox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" style="width:800px;">
+                <div class="modal-content" id="myModal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">需求审核</h4>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset>
+
+                            <div class="control-group">
+                                <label for="input01" class="control-label">请选择</label>
+                                <div class="controls">
+                                    <select v-model="shobj.state" class="form-control">
+                                        <option value="">
+                                            请选择
+                                        </option>
+                                        <option v-for="item in shlist" :value='item.id'>
+                                            {{item.name}}
+                                        </option>
+                                    </select>
+
+
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="input01" class="control-label">理由</label>
+                                <div class="controls">
+                                    <textarea rows="5" class="form-control" cols="120" v-model="shobj.liyou">
+
+
+                                    </textarea>
+
+                                </div>
+                            </div>
+
+
+
+                        </fieldset>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary" v-on:click="sh()">确认</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="modal fade" id="updatestatebox1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" style="width:800px;">
+                <div class="modal-content" id="myModal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">状态变更</h4>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset>
+
+                            <div class="control-group">
+                                <label for="input01" class="control-label">请选择</label>
+                                <div class="controls">
+
+
+                                    <select v-model="editobj.state" class="form-control">
+                                        <option value="">
+                                            请选择
+                                        </option>
+                                        <option v-for="item in statelist1" :value='item.id'>
+                                            {{item.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                        </fieldset>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary" v-on:click="updatestateinfo()">确认</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+<input type="hidden" id="quanxian" value="{$quanxian}" />
+
+
+<script src="/Content/bootstrap/js/bootstrap.min.js"></script>
+<script src="/Content/sweetalert/sweetalert.min.js"></script>
+<script src="/Content/js/vue2.js"></script>
+<script src="/Content/js/vue-nav.js"></script>
+<script src="/Content/sweetalert/sweetalert.min.js"></script>
+<script src="/Content/FileUpload/js/vendor/jquery.ui.widget.js"></script>
+<script src="/Content/FileUpload/js/jquery.iframe-transport.js"></script>
+<script src="/Content/FileUpload/js/jquery.fileupload.js"></script>
+<script type="text/javascript" src="/Content/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/Content/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" src="/Content/bootstrap/js/bootstrap-select.js" charset="utf-8"></script>
+<link rel="stylesheet" href="/Content/bootstrap/css/bootstrap-select.css">
+<script>
+
+    var add_ue = UE.getEditor('add_content');
+    var eidt_ue = UE.getEditor('edit_content');
+    var vm = new Vue({
+        el: ".app",
+        data: {
+
+            all: 0,
+            arrayData: [],
+            allcount: 0,
+            typelist: [],
+            addobj: {
+                state: "0"
+            },
+            editobj: {},
+            statelist: [{ "id": 1, "name": "是" }, { "id": 0, "name": "否" }],
+            paytypelist: [{ "id": 1, "name": "月" }, { "id": 0, "name": "人" }],
+            shlist: [{ "id": 1, "name": "审核通过" }, { "id": -1, "name": "审核不通过" }],
+            lingyulist: [],
+            jingyanlist: [],
+            xinzilist: [],
+            hangyelist: [],
+            info: {},
+            orderlist: [],
+            personlist: [],
+            shobj: {},
+            search: {
+                page: 1,
+                size: 10
+            },
+            statelist1: [{ "id": 3, "name": "暂停" }, { "id": 2, "name": "关闭" }, { "id": 4, "name": "重新打开" }],
+
+        },
+        components: {
+            'vue-nav': Vnav
+        },
+        methods: {
+            GetRequest: function (value) {
+                var url = decodeURI(location.search); //?id="123456"&Name="bicycle";
+                var object = {};
+
+                if (url.indexOf("?") != -1) {
+                    //url中存在问号，也就说有参数。
+                    var str = url.substr(1); //得到?后面的字符串
+                    var strs = str.split("&"); //将得到的参数分隔成数组[id="123456",Name="bicycle"];
+                    for (var i = 0; i < strs.length; i++) {
+                        object[strs[i].split("=")[0]] = strs[i].split("=")[1];
+                    }
+                }
+
+                return object[value];
+            },
+            updatestate: function (uitem) {
+                this.editobj =uitem;
+            
+                $("#updatestatebox1").modal('show');
+            },
+            jiance: function (str) {
+                var quanxian = $("#quanxian").val();
+                var arr = quanxian.split(",");
+                var bool = false;
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i] == str) {
+                        bool = true;
+                        break;
+                    }
+                }
+                return bool;
+            },
+            view: function (uitem) {
+                this.info = uitem;
+                var _this = this;
+                $.post("/Home/Office/orderlist", { "workid": uitem.id }, function (data) {
+                    _this.orderlist = data.list;
+                });
+                $.post("/Home/Person/getpersonsystem", { "workid": uitem.id }, function (data) {
+                    _this.personlist = data.list;
+                });
+
+                $("#viewbox").modal('show');
+            },
+            loadjingyan: function () {
+                var _this = this;
+                $.post("/Home/System/getdic", { code: "jingyan" }, function (data) {
+                    _this.jingyanlist = data;
+                });
+            },
+            loadxinzi: function () {
+                var _this = this;
+                $.post("/Home/System/getdic", { code: "xinzi" }, function (data) {
+                    _this.xinzilist = data;
+                });
+            },
+            loadhangye: function () {
+                var _this = this;
+                $.post("/Home/System/getdic", { code: "hangye" }, function (data) {
+                    _this.hangyelist = data;
+                });
+            },
+            loadlingyu: function (id) {
+
+                $.post("/Home/System/getdic", { code: "lingyu" }, function (data) {
+                    $('#' + id).html("");
+                    for (var i = 0; i < data.length; i++) {
+                        var title = data[i].title;
+                        $('#' + id).append("<option>" + title + "</option>")
+                    }
+                    $('#' + id).selectpicker('refresh');
+
+
+                });
+
+            },
+            add: function () {
+                this.addobj = { state: "" };
+                this.loadjingyan();
+                this.loadxinzi();
+                this.loadhangye();
+                this.loadlingyu("lingyuadd");
+
+                $("#addbox").modal('show');
+            },
+            insert: function () {
+                var self = this;
+                this.addobj.id = "";
+                this.addobj.content = add_ue.getContent();
+                if ($("#lingyuadd").val() != null) {
+                    this.addobj.lingyu = $("#lingyuadd").val().join(",");
+                }
+
+
+                $.post("/Home/Office/addwork", this.addobj, function (data) {
+                    if (data.status == 200) {
+                        $("#addbox").modal('hide');
+                        swal("success", "添加成功", "success");
+                        self.addobj = {};
+                        self.getdata("");
+                    } else {
+                        swal("系统提示", data.message, "error");
+                    }
+
+                });
+            },
+            getdata: function (_keycontent) {  //查询数据
+
+                var self = this;
+                $.post("/Home/Office/worklist", this.search, function (_result) {
+                    console.log(_result);
+                    self.arrayData = _result.list;
+                    self.all = _result.count;
+                    self.allcount = _result.allcount;
+                });
+            },
+            callback: function (data) {
+                var self = this;
+                this.search.page = data;
+                $.post("/Home/Office/worklist", this.search, function (_result) {
+                    self.arrayData = _result.list;
+                    self.all = _result.count;
+                    self.allcount = _result.allcount;
+                });
+            },
+            vupdate: function (uitem) {
+                this.loadjingyan();
+                this.loadxinzi();
+                this.loadhangye();
+                this.loadlingyu("lingyuedit");
+                var _this = this;
+
+
+
+
+                $("#editbox").modal('show');
+
+                setTimeout(() => {
+                    _this.editobj = uitem;
+
+                    $('#lingyuedit').selectpicker('val', uitem.lingyu.split(","));
+
+                    eidt_ue.setContent(uitem.content);
+
+                }, 1000);
+
+            },
+            update: function () {
+                var self = this;
+
+
+                if ($("#lingyuedit").val() != null) {
+                    this.editobj.lingyu = $("#lingyuedit").val().join(",");
+                }
+
+                this.editobj.content = eidt_ue.getContent();
+                $.post("/Home/Office/addwork", this.editobj, function (data) {
+                    if (data.status == 200) {
+                        $("#editbox").modal('hide');
+                        swal("success", "修改成功", "success");
+                        self.getdata("");
+                    } else {
+                        swal("系统提示", data.message, "error");
+                    }
+
+                });
+
+            },
+            shshow: function (uitem) {
+                this.shobj = uitem;
+                $("#shbox").modal('show');
+            },
+            vdel: function (uitem) {
+                var self = this;
+                swal({
+                    title: "确定要删除吗?",
+                    text: "",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "是",
+                    closeOnConfirm: false
+                }, function () {
+
+                    $.post("/Home/Office/delwork", { "id": uitem.id }, function (data) {
+                        if (data.status == 200) {
+
+                            swal("Deleted!", data.message, "success");
+                            self.getdata("");
+                        } else {
+                            swal("系统提示", data.message, "error");
+                        }
+                    });
+
+                });
+            },
+            sh: function () {
+                var self = this;
+
+                $.post("/Home/Office/shwork", this.shobj, function (data) {
+                    if (data.status == 200) {
+                        $("#shbox").modal('hide');
+                        swal("系统提示", data.message, "success");
+                        self.getdata("");
+                    } else {
+                        swal("系统提示", data.message, "error");
+                    }
+                });
+
+
+            },
+            tijiao: function (uitem) {
+                $.post("/Home/Office/updateworkstate", { "id": uitem.id,"state":0 }, function (data) {
+                    if (data.status == 200) {
+
+                        swal("Deleted!", data.message, "success");
+                        self.getdata("");
+                    } else {
+                        swal("系统提示", data.message, "error");
+                    }
+                });
+
+
+            },
+            goshow: function (uitem) {
+
+                parent.x_admin_add_to_tab('关联推荐单', '/Home/Office/order.html?orderid=' + uitem.id, true)
+            },
+            goshowperson: function (uitem) {
+
+                parent.x_admin_add_to_tab('关联人才', '/Home/Office/person.html?personid=' + uitem.id, true)
+            },
+            updatestateinfo: function () {
+                var self = this;
+      
+
+
+
+                $.post("/Home/Office/updateworkstate", this.editobj, function (data) {
+                    if (data.status == 200) {
+                        $("#updatestatebox1").modal('hide');
+                    
+                        swal("success", data.message, "success");
+                        self.getdata("");
+                    } else {
+                        swal("系统提示", data.message, "error");
+                    }
+
+                });
+
+            },
+
+        },
+        created: function () {  //初始化事件里边去调用查询方法
+            this.search.workid = this.GetRequest("workid");
+
+            this.getdata("");
+
+            var $citypicker3 = $('#city-picker3');
+
+            $('#reset').click(function () {
+                $citypicker3.citypicker('reset');
+            });
+
+            $('#destroy').click(function () {
+                $citypicker3.citypicker('destroy');
+            });
+
+
+
+        }
+    });
+
+</script>
