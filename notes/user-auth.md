@@ -1,3 +1,9 @@
+---
+title: user-auth
+created: '2019-09-04T01:42:48.526Z'
+modified: '2019-09-04T10:42:17.639Z'
+---
+
 利用 Sails.js + MongoDB 开发博客系统（3）-- 账户模块
 May 3, 2015
 CONTENTS
@@ -683,9 +689,4 @@ define(['./PassportPanel.js'],function(PassportPanel){
         }
     }
 });
-测试一下：
 
-
-
-章节预告
-在下一章当中，我们开始实现博客系统的文章模块。
