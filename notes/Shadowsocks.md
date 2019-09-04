@@ -1,10 +1,10 @@
-# 你也能写个 Shadowsocks
+---
+title: Shadowsocks
+created: '2019-09-04T01:42:48.279Z'
+modified: '2019-09-04T03:47:38.365Z'
+---
 
-Posted by 吴浩麟 on 2017\-11\-03
-
-本文将教你从0写一个[Shadowsocks](https://github.com/shadowsocks/shadowsocks-go)，无需任何基础，读完本文你就能完成一个轻量级、高性能的 Shadowsocks 代替品。
-
-我们暂且把最终完成的项目叫做 Lightsocks，如果你很急切地想看到结果，可以先体验本文最终完成的项目 [Lightsocks](https://github.com/gwuhaolin/lightsocks) ，也可以下载阅读源码。
+# Shadowsocks
 
 ## [](#认识-Shadowsocks "认识 Shadowsocks")认识 Shadowsocks[](#认识-Shadowsocks)
 
@@ -1060,7 +1060,5 @@ func (lsServer \*LsServer) handleConn(localConn \*net.TCPConn) {
  |
 
 ---
-
-以上就是实现一个轻量级 Shadowsocks 的核心代码。其它一些零碎的代码，例如启动入口、配置读写等，可以去 [lightsocks](https://github.com/gwuhaolin/lightsocks) 项目中阅读完整代码。
 
 [阅读原文](http://wuhaolin.cn/2017/11/03/%E4%BD%A0%E4%B9%9F%E8%83%BD%E5%86%99%E4%B8%AA%20Shadowsocks/)
