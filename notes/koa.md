@@ -1,18 +1,14 @@
+---
+title: koa
+created: '2019-09-04T01:42:48.430Z'
+modified: '2019-09-20T07:25:27.075Z'
+---
+
 # Koa 编程指南
 
-## 前提
+Node 奇数版本属于不稳定版本，偶数版本属于稳定版本。我们建议直接使用最新的偶数版本的 Node。
 
-- 本书所讲的 Koa 是指 Koa 版本2。内容不包含 Koa 版本1部分。
-
-Koa 大量使用了 async、await 函数，Node 从 v7.6.0 开始才完全支持async/await。
-
-在使用 Koa 之前，我们需要确保自己使用的是 Node 7.6 及以上的版本。
-
-Node 奇数版本属于不稳定版本，偶数版本属于稳定版本。因此我们建议直接使用最新的偶数版本的 Node。
-
-当前建议使用 Node v8.9.4。
-
-## Koa 及用途
+Node 从 v7.6.0 开始才完全支持async/await，Koa 大量使用了 async、await 函数，我们需要确保自己使用的是 Node 7.6 及以上的版本。
 
 Koa 是一个轻量级的 Web 框架。
 
@@ -194,11 +190,6 @@ const main = ctx => {
 }
 
 ### koa-route 模块
-
-
-
-
-
 
 原生路由用起来不太方便，我们可以使用封装好的koa-route模块。
 
@@ -2555,6 +2546,3 @@ file | 文件(引用)	*.js,*.json等直接支持 | 默认只能是*.mjs，通过
 
 [ECMAScript Modules](https://nodejs.org/dist/latest-v9.x/docs/api/esm.html)
 
-### 文档信息
-
-创建日期：2018-02-17

@@ -1,3 +1,10 @@
+---
+tags: [certbot]
+title: certbot
+created: '2019-09-04T01:42:48.360Z'
+modified: '2019-09-20T07:28:10.103Z'
+---
+
 本文内容较长，因为涵盖背景知识、基本概念和完整的实操过程，如果一步步照着做的话，应该就可以一次配置成功。不想要了解背景知识的同学可以直接跳到实操过程，六步即可使用 Let’s Encrypt 官方工具 [Certbot](https://linuxstory.org/tag/certbot/ "View all posts in Certbot") 配置 [SSL](https://linuxstory.org/tag/ssl/ "View all posts in SSL") 安全证书。
 
 ---
