@@ -1,10 +1,10 @@
 ---
-title: 原来FTP传输已经是逐步走向灭亡
+title: FTP 协议
 created: '2019-09-28T03:53:49.945Z'
-modified: '2019-09-28T06:06:56.689Z'
+modified: '2019-09-29T03:14:15.623Z'
 ---
 
-# 原来FTP传输已经是逐步走向灭亡
+# FTP 协议
 
 　谷歌旗下的Chrome浏览器之前将要标注了HTTP类网址为不安全，而近日处于不安全领域的名单又一次增加，那就是大名鼎鼎的FTP网站。事实上，FTP服务被标记不安全并不意外，其安全性相比之下比之前被标记为不安全的HTTP还要差，因此其被关小黑屋也就不奇怪了。
 
@@ -27,12 +27,6 @@ Employees can work together in Microsoft Word or Excel. Plus, they'll always hav
 SIMPLIFY MANAGEMENT
 As a fully cloud-based solution, Box eliminates the burden of provisioning new hardware, increasing storage and maintaining network infrastructure.
 
-
-# Four Modern Alternatives to FTP Explained
-
-Posted on July 8, 2016 | Tags: [as2](https://www.goanywhere.com/blog/2016/07/08/blog/tag/as2), [ftp alternative](https://www.goanywhere.com/blog/2016/07/08/blog/tag/ftp-alternative), [https](https://www.goanywhere.com/blog/2016/07/08/blog/tag/https), [sftp](https://www.goanywhere.com/blog/2016/07/08/blog/tag/sftp), [breach](https://www.goanywhere.com/blog/2016/07/08/blog/tag/breach), [ftp over ssh](https://www.goanywhere.com/blog/2016/07/08/blog/tag/ftp-over-ssh), [edi](https://www.goanywhere.com/blog/2016/07/08/blog/tag/edi) | Categories: [FTP](https://www.goanywhere.com/blog/2016/07/08/blog/category/ftp)
-
-[LinkedIn](# "LinkedIn") [Twitter](# "Twitter") [AddThis](#) [](#)[0](# "More")Share [Facebook](# "Facebook")
 
 Today's data\-driven world is demanding, requiring accuracy, speed, integrity and above all \-\- security. It's a tall order to fill, and in the past, many organizations relied heavily on the legacy FTP protocol to transmit files. But over time, FTP alternatives have become necessary as the security of this method has been tested by hackers.
 
